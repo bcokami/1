@@ -1,0 +1,69 @@
+.content_style {
+    background-color: #333;
+    color: #fff;
+}
+
+.let-card {
+    background-color: #444;
+    color: #fff;
+}
+
+.let-text-dark {
+    color: #ccc !important;
+}
+
+.let-bg-primary {
+    background-color: #222 !important;
+}
+
+.let-text-light {
+    color: #aaa !important;
+}
+
+.unilevelmlm-wallet {
+    background-color: #333;
+    color: #fff;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.wallet-balance {
+    background-color: #444;
+    color: #fff;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.transaction-history {
+    background-color: #444;
+    color: #fff;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.transaction-history ul {
+    list-style: none;
+    padding: 0;
+}
+
+.transaction-history li {
+    padding: 5px 0;
+    border-bottom: 1px solid #555;
+}
+
+.wallet-actions {
+    padding: 10px;
+}
+
+.wallet-actions button {
+    background-color: #222;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.wallet-actions button:hover {
+    background-color: #555;
+}

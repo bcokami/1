@@ -1,0 +1,241 @@
+# Drupal Deployment Guide
+
+This document provides a step-by-step guide on how to deploy a Drupal website to a Contabo VPS (Ubuntu) with a full Git-based development workflow.
+
+## I. Initial Server Setup
+
+1.  **Run the `initial_server_setup.sh` script:**
+
+    ```bash
+    #!/bin/bash
+    # This script automates the initial server setup on a Contabo VPS (Ubuntu).
+
+    # Set variables
+    USERNAME="deploy"
+    DOMAIN="extremelifeherbal.com" # Replace with your actual domain
+    EMAIL="your_email@example.com" # Replace with your actual email
+
+    # 1. Install Required Packages
+    echo "Installing required packages..."
+    sudo apt update -y
+    sudo apt upgrade -y
+    sudo apt install -y apache2 mariadb-server php8.1 php8.1-cli php8.1-mysql php8.1-gd php8.1-curl composer git certbot python3-certbot-apache unzip
+
+    # 6. Configure MariaDB
+    echo "Configuring MariaDB..."
+    sudo mysql -e "CREATE DATABASE drupal;"
+    sudo mysql -e "CREATE USER 'drupaluser'@'localhost' IDENTIFIED BY 'password';"
+    sudo mysql -e "GRANT ALL PRIVILEGES ON drupal.* TO 'drupaluser'@'localhost';"
+    sudo mysql -e "FLUSH PRIVILEGES;"
+
+    # 2. Create Secure Sudo User
+    echo "Creating secure sudo user..."
+    sudo adduser $USERNAME
+    sudo usermod -aG sudo $USERNAME
+    sudo passwd -l root
+
+    # 3. Enable UFW Firewall
+    echo "Enabling UFW firewall..."
+    sudo ufw enable
+    sudo ufw allow OpenSSH
+    sudo ufw allow 'Apache Full'
+    sudo ufw enable
+
+    # 4. Enable Fail2Ban
+    echo "Enabling Fail2Ban..."
+    sudo apt install -y fail2ban
+    # Configure Fail2Ban (customize settings in /etc/fail2ban/jail.local)
+    sudo systemctl enable fail2ban
+
+    # 5. Configure SSH Key-Based Access
+    echo "Configuring SSH key-based access..."
+    # (This step requires manual intervention - copy your public key to the server)
+    echo "Please copy your public key to the server using ssh-copy-id $USERNAME@your_server_ip"
+    # After copying the key, run the following commands:
+    echo "After copying the key, run the following commands:"
+    echo "sudo sed -i 's/^PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/sshd_config"
+    echo "sudo sed -i 's/^PermitRootLogin yes/PermitRootLogin no/' /etc/ssh/sshd_config"
+    echo "sudo systemctl restart sshd"
+
+    echo "Initial server setup complete!"
+    ```
+
+6.  **Manually configure SSH Key-Based Access:**
+    *   Generate SSH key pair on local machine: `ssh-keygen -t rsa -b 4096`
+    *   Copy public key to server: `ssh-copy-id deploy@your_server_ip`
+    *   Disable password authentication in `/etc/ssh/sshd_config`:
+        *   `PasswordAuthentication no`
+        *   `PermitRootLogin no`
+    *   Restart SSH service: `sudo systemctl restart sshd`
+
+## II. Git-Based Drupal Deployment
+
+1.  **Run the `git_based_deployment.sh` script:**
+
+    ```bash
+    #!/bin/bash
+    # This script automates the Git-based Drupal deployment.
+
+    # Set variables
+    REPO_URL="https://github.com/your_username/your_drupal_repo.git" # Replace with your actual repository URL
+    DEPLOY_USER="deploy"
+
+    # 1. Create the directory structure
+    echo "Creating the directory structure..."
+    sudo mkdir -p /var/www/dev /var/www/staging /var/www/test /var/www/live /var/www/shared
+
+    # 2. Clone the Drupal site from Git
+    echo "Cloning the Drupal site from Git..."
+    sudo git clone $REPO_URL /var/www/dev
+
+    # 3. Set up Git hooks/CI-CD
+    echo "Setting up Git hooks/CI-CD..."
+    # Create a post-receive hook
+    cat <<EOF | sudo tee /var/www/dev/.git/hooks/post-receive
+    #!/bin/bash
+    while read oldrev newrev ref
+    do
+        if [[ \$ref =~ .*/main\$ ]]; then
+            echo "Main branch was updated. Deploying..."
+            git checkout -f main
+            drush cr
+        fi
+    done
+    EOF
+    sudo chmod +x /var/www/dev/.git/hooks/post-receive
+
+    echo "Git-based Drupal deployment setup complete!"
+    ```
+
+## III. Environment Setup
+
+1.  **Run the `environment_setup.sh` script:**
+
+    ```bash
+    #!/bin/bash
+    # This script automates the environment setup (Dev, Staging, Test, Live).
+
+    # Set variables
+    DOMAIN="extremelifeherbal.com" # Replace with your actual domain
+
+    # 1. Set up Virtual Hosts/Subdomains
+    echo "Setting up Virtual Hosts/Subdomains..."
+    # (This step requires manual configuration of Apache/Nginx virtual host files)
+    echo "Please create Apache/Nginx virtual host files for each environment:"
+    echo "dev.$DOMAIN, staging.$DOMAIN, test.$DOMAIN, live.$DOMAIN"
+    echo "Configure document root to point to the corresponding directory in /var/www"
+
+    # 2. Configure Separate Databases
+    echo "Configuring Separate Databases..."
+    # (This step requires manual creation of databases and users)
+    echo "Please create separate databases for each environment:"
+    echo "dev_db, staging_db, test_db, live_db"
+    echo "Grant appropriate permissions to the database users."
+
+    # 3. Implement Environment-Specific Configuration
+    echo "Implementing Environment-Specific Configuration..."
+    # Create .env files in each environment's directory
+    echo "Creating .env files..."
+    sudo touch /var/www/dev/.env
+    sudo touch /var/www/staging/.env
+    sudo touch /var/www/test/.env
+    sudo touch /var/www/live/.env
+
+    echo "Please define environment-specific variables (database credentials, etc.) in each .env file."
+    # Example:
+    # DB_HOST=localhost
+    # DB_NAME=dev_db
+    # DB_USER=drupaluser
+    # DB_PASS=password
+
+    echo "Environment setup complete!"
+    ```
+
+2.  **Manually configure Apache/Nginx virtual host files.**
+3.  **Manually create separate databases and users.**
+4.  **Manually define environment-specific variables in each .env file.**
+
+## IV. SSL Configuration
+
+1.  **Run the `ssl_configuration.sh` script:**
+
+    ```bash
+    #!/bin/bash
+    # This script automates the SSL configuration using Let's Encrypt with Certbot.
+
+    # Set variables
+    DOMAIN="extremelifeherbal.com" # Replace with your actual domain
+
+    # 1. Install Certbot
+    echo "Installing Certbot..."
+    sudo apt install -y certbot python3-certbot-apache
+
+    # 2. Generate SSL Certificates
+    echo "Generating SSL Certificates..."
+    sudo certbot --apache -d dev.$DOMAIN -d staging.$DOMAIN -d test.$DOMAIN -d $DOMAIN
+
+    # 3. Configure HTTP to HTTPS Redirection
+    echo "Configuring HTTP to HTTPS Redirection..."
+    # (This step requires manual configuration of Apache virtual host files)
+    echo "Please configure Apache virtual host files to redirect HTTP traffic to HTTPS."
+
+    echo "SSL configuration complete!"
+    ```
+
+5.  **Manually configure Apache virtual host files to redirect HTTP traffic to HTTPS.**
+
+## V. Database and File Sync
+
+1.  **Run the `database_file_sync.sh` script:**
+
+    ```bash
+    #!/bin/bash
+    # This script automates the database and file sync from live to test.
+
+    # Set variables
+    LIVE_DIR="/var/www/live"
+    TEST_DIR="/var/www/test"
+
+    # 1. Sync the database from live to test
+    echo "Syncing the database from live to test..."
+    drush sql-dump --result-file=/tmp/live_db.sql -r $LIVE_DIR
+    drush sql-cli < /tmp/live_db.sql -r $TEST_DIR
+
+    # 2. Sync files from live to test
+    echo "Syncing files from live to test..."
+    rsync -avz $LIVE_DIR/sites/default/files/ $TEST_DIR/sites/default/files/
+
+    echo "Database and file sync complete!"
+    ```
+
+## VI. Drupal Dashboard Modules
+
+1.  **Install Drupal Dashboard Modules:**
+    *   Log in to your Drupal administration interface.
+    *   Navigate to the Modules page (usually found at `/admin/modules`).
+    *   Search for the "Admin Toolbar" and "Monitoring" modules.
+    *   Enable the modules and click the `Install` button.
+
+## VII. User Guide
+
+# User Guide
+
+This document provides a guide on how to use the Drupal deployment system.
+
+## Deploying Code
+
+1.  Commit your changes to the Git repository.
+2.  Push your changes to the main branch.
+3.  The changes will be automatically deployed to the live environment.
+
+## Syncing the Database
+
+1.  Ensure you have Drush installed and configured on the server.
+2.  Ensure you have SSH access to the server.
+3.  Run the `database_file_sync.sh` script to sync the database from live to test:
+    `bash database_file_sync.sh`
+
+## Monitoring the System
+
+1.  Use a monitoring service like Uptime Kuma to check SSL certificate expiration.
+2.  Use a log management tool to monitor error logs and deployment logs.
