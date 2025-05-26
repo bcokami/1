@@ -772,4 +772,32 @@ run_tests
 
 print_success "Contabo VPS deployment completed!"
 
+# Function to add a umd user
+add_umd_user() {
+    print_status "Starting add_umd_user function"
+    useradd -m umd
+    passwd umd
+    usermod -aG sudo umd
+    print_success "Added umd user"
+}
+
+# Main execution
+check_root
+get_user_configuration
+detect_contabo
+add_umd_user
+install_base_packages
+optimize_contabo
+install_lamp
+configure_apache_vhost
+configure_mysql_server
+optimize_php_settings
+setup_letsencrypt_ssl
+configure_firewall_security
+configure_monitoring
+configure_backups
+run_tests
+
+print_success "Contabo VPS deployment completed!"
+
 exit 0
