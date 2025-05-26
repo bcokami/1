@@ -1,6 +1,6 @@
 #!/bin/bash
 # Contabo VPS Deployment Script for UMD Drupal Project
-# Optimized for Contabo VPS infrastructure with Ubuntu 24.04
+# Optimized for Contabo VPS infrastructure with Ubuntu 22.04
 
 set -e  # Exit on any error
 

@@ -1,17 +1,17 @@
 # UMD (Unilevel MLM) Drupal Project
 
-A comprehensive Multi-Level Marketing (MLM) system built on Drupal 11.1.x with Ubuntu 24.04 compatibility and automated Contabo VPS deployment.
+A comprehensive Multi-Level Marketing (MLM) system built on Drupal 11.1.x with Ubuntu 22.04 compatibility and automated Contabo VPS deployment.
 
 ## 🚀 Quick Start
 
-### For Ubuntu 24.04 Deployment (Recommended)
+### For Ubuntu 22.04 Deployment (Recommended)
 
 ```bash
 # Clone the repository
 git clone https://github.com/Ebret/1.git umd-drupal
 cd umd-drupal
 
-# Run automated Ubuntu 24.04 setup
+# Run automated Ubuntu 22.04 setup
 chmod +x scripts/ubuntu_24_04_setup.sh
 ./scripts/ubuntu_24_04_setup.sh
 ```
@@ -35,7 +35,7 @@ chmod +x contabo_vps_deploy.sh
 │   ├── contabo_quick_deploy.md
 │   └── BRANCH_SUMMARY.md
 ├── scripts/                        # Deployment Scripts
-│   ├── ubuntu_24_04_setup.sh      # Main Ubuntu 24.04 setup
+│   ├── ubuntu_24_04_setup.sh      # Main Ubuntu 22.04 setup
 │   ├── contabo_vps_deploy.sh       # Contabo VPS deployment
 │   ├── environment_setup.sh        # Environment configuration
 │   └── initial_server_setup.sh     # Server initialization
@@ -66,7 +66,7 @@ chmod +x contabo_vps_deploy.sh
 ### Technical Features
 - **Drupal 11.1.x compatibility**
 - **PHP 8.3+ optimized**
-- **Ubuntu 24.04 LTS support**
+- **Ubuntu 22.04 LTS support**
 - **Automated deployment scripts**
 - **Contabo VPS optimization**
 - **SSL certificate automation**
@@ -75,15 +75,15 @@ chmod +x contabo_vps_deploy.sh
 
 ## 🛠️ Installation Options
 
-### Option 1: Ubuntu 24.04 Local/VPS Setup
+### Option 1: Ubuntu 22.04 Local/VPS Setup
 - **Best for**: Development and production
-- **Requirements**: Ubuntu 24.04 LTS
+- **Requirements**: Ubuntu 22.04 LTS
 - **Setup time**: 15-30 minutes
 - **Script**: `scripts/ubuntu_24_04_setup.sh`
 
 ### Option 2: Contabo VPS Deployment
 - **Best for**: Production hosting
-- **Requirements**: Contabo VPS with Ubuntu 24.04
+- **Requirements**: Contabo VPS with Ubuntu 22.04
 - **Setup time**: 15-30 minutes
 - **Cost**: €10-15/month
 - **Script**: `scripts/contabo_vps_deploy.sh`
@@ -96,7 +96,7 @@ chmod +x contabo_vps_deploy.sh
 ## 📋 System Requirements
 
 ### Minimum Requirements
-- **OS**: Ubuntu 24.04 LTS (recommended) or Ubuntu 22.04+
+- **OS**: Ubuntu 22.04 LTS (recommended) or Ubuntu 22.04+
 - **PHP**: 8.3+ (8.1+ minimum)
 - **Database**: MySQL 8.0+ or MariaDB 10.6+
 - **Web Server**: Apache 2.4+ or Nginx 1.18+
@@ -110,7 +110,7 @@ chmod +x contabo_vps_deploy.sh
 
 ## 🚀 Performance Optimizations
 
-### Ubuntu 24.04 Advantages
+### Ubuntu 22.04 Advantages
 - **3-5x faster** than Windows development environment
 - **Native PHP 8.3** support without compatibility issues
 - **No file locking** problems (eliminates Windows issues)
@@ -129,8 +129,8 @@ chmod +x contabo_vps_deploy.sh
 # Test compatibility
 php tests/ubuntu_compatibility_test.php
 
-# Run setup script
-./scripts/ubuntu_24_04_setup.sh
+# Run setup script as a regular user with sudo privileges
+sudo ./scripts/ubuntu_22_04_setup.sh
 ```
 
 ### 2. Project Deployment
@@ -159,7 +159,7 @@ vendor/bin/drush status
 
 | Environment | Setup Time | Performance | Cost/Month | Best For |
 |-------------|------------|-------------|------------|----------|
-| **Ubuntu 24.04 Local** | 15-30 min | Excellent | Free | Development |
+| **Ubuntu 22.04 Local** | 15-30 min | Excellent | Free | Development |
 | **Contabo VPS S** | 15-30 min | Very Good | €4.99 | Small Production |
 | **Contabo VPS M** | 15-30 min | Excellent | €8.99 | **Recommended** |
 | **Contabo VPS L** | 15-30 min | Outstanding | €14.99 | High Traffic |
@@ -197,7 +197,7 @@ tail -f /var/log/apache2/error.log
 ## 🆘 Support & Documentation
 
 ### Documentation
-- **Complete Setup Guide**: `docs/ubuntu_24_04_compatibility_analysis.md`
+- **Complete Setup Guide**: `docs/ubuntu_22_04_compatibility_analysis.md`
 - **Contabo Deployment**: `docs/contabo_vps_deployment_guide.md`
 - **Quick Start**: `docs/contabo_quick_deploy.md`
 - **Branch Information**: `docs/BRANCH_SUMMARY.md`
@@ -246,7 +246,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ---
 
-**Ready for production deployment with Ubuntu 24.04 and Contabo VPS!** 🚀
+**Ready for production deployment with Ubuntu 22.04 and Contabo VPS!** 🚀
 
 ## 🔑 Credentials
 
