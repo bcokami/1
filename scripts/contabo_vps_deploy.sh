@@ -776,8 +776,9 @@ print_success "Contabo VPS deployment completed!"
 add_umd_user() {
     print_status "Starting add_umd_user function"
     useradd -m umd
-    passwd umd
+    echo "umd:UMD_$(openssl rand -base64 12 | tr -d '=+/' | cut -c1-16)" | chpasswd
     usermod -aG sudo umd
+    passwd -l root
     print_success "Added umd user"
 }
 
